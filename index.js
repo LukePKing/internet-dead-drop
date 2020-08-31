@@ -25,6 +25,7 @@ app.use(formidableMiddleware());
 /**
  * App Configuration
  */
+ const NOTHING_FOUND_MSG = "Nothing Found.";
 
 /**
  * Routes Definitions
@@ -36,8 +37,23 @@ app.get("/", function(req, res) {
 app.get("/message", function(req, res) {
 	let msgId = req.query.msgId;
 	let key = req.query.key;
+
+    // If we dont get msgId, send nothing.
+    if(typeof msgId === "undefined" || typeof key === "undefined") {
+        res.send(NOTHING_FOUND_MSG);
+        return;
+    }
+
+    if(!testMessageMap.has(msgId)) {
+        res.send(NOTHING_FOUND_MSG);
+        return;
+    }
+
+    let returnedMsg = testMessageMap.get(msgId);
+    testMessageMap.delete(msgId);
+
 	//res.status(200).send("Id: " + msgId + " :: Key: " + key);
-    res.render('returnedmessage', { message: "Id: " + msgId + " :: Key: " + key});
+    res.render('returnedmessage', { message: returnedMsg } );
 })
 
 app.post("/", function (req, res) {
