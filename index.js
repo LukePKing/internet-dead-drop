@@ -63,7 +63,10 @@ app.post("/", function (req, res) {
     // Store in Map (for now)
     let message = req.fields.message;
     testMessageMap.set(msgId, message);
-    res.send("POST request to homepage. Your messsage id is: " + msgId);
+
+    let link = "http://localhost:" + port + "/message?msgId=" + msgId + "&key=none";
+
+    res.send("Your one-time retrieval link is: " + link);
 })
 
 /**
